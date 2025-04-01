@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.secondAPI.DTO.LoginRequestDTO;
 import com.example.secondAPI.DTO.SignUpRequestDTO;
 import com.example.secondAPI.DTO.TokenResponseDTO;
+import com.example.secondAPI.DTO.UserDetailDTO;
 import com.example.secondAPI.DTO.UserResponseDTO;
 import com.example.secondAPI.Exception.InvalidTokenException;
 import com.example.secondAPI.Exception.UserAlreadyExsistsException;
@@ -18,6 +18,8 @@ import com.example.secondAPI.Exception.UserNameNotFoundException;
 import com.example.secondAPI.Model.Token;
 import com.example.secondAPI.Model.User;
 import com.example.secondAPI.Service.UserService;
+
+import io.micrometer.common.lang.NonNull;
 
 @RestController
 @RequestMapping("/user")
@@ -57,8 +59,9 @@ public class UserController {
     }
 
     @PostMapping("/validate/{token}")
-    public ResponseEntity<Boolean> valodateToken(@PathVariable("token") String token)throws InvalidTokenException{
-        return new ResponseEntity<>(userService.validateToken(token),HttpStatus.ACCEPTED);
+    public ResponseEntity<UserDetailDTO> validateToken(@PathVariable("token") @NonNull String token)throws InvalidTokenException{
+        User returnedUserFromToken = userService.validateToken(token);
+        return new ResponseEntity<>(UserDetailDTO.from(returnedUserFromToken),HttpStatus.ACCEPTED);
     }
  
 }

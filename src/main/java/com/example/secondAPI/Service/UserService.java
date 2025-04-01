@@ -14,5 +14,5 @@ public interface UserService {
     public User SignUp(String name,String email,String pwd,List<Role> role)throws UserAlreadyExsistsException;
     public Token login(String email, String password)throws UserNameNotFoundException;
     public String signOut(String tokenValue)throws InvalidTokenException;
-    public Boolean validateToken(String tokenVal)throws InvalidTokenException;
+    public User validateToken(String tokenVal)throws InvalidTokenException;
 } 

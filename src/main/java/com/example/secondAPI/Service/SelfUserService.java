@@ -111,7 +111,7 @@ public class SelfUserService implements UserService{
         return " Token Deleted ";
     }
 
-    public Boolean validateToken(String tokenVal)throws InvalidTokenException{
+    public User validateToken(String tokenVal)throws InvalidTokenException{
 
         long millis = System.currentTimeMillis();
         java.sql.Date sqlDate = new java.sql.Date(millis);
@@ -120,7 +120,7 @@ public class SelfUserService implements UserService{
             throw new InvalidTokenException(" Given token is invalid ");
         }
 
-        return true;
+        return optionalToken.get().getUser();
     }
 
 }
