@@ -5,13 +5,11 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
-
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -46,9 +44,8 @@ public class SecurityConfig {
 	@Order(1)
 	public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
 			throws Exception {
-		OAuth2AuthorizationServerConfigurer authorizationServerConfigurer = 
-				new OAuth2AuthorizationServerConfigurer();
-		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
+		OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
+				OAuth2AuthorizationServerConfigurer.authorizationServer();
 
 		http
 			.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
@@ -91,33 +88,33 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 		UserDetails userDetails = User.builder()
 				.username("user")
-				.password("$2a$12$VTY144kC7HTPzj2X2AkRKesJhLBNAOOqiSwqE9IRU1fcl0Tx0E9Qm")
+				.password("$2a$12$PEh3GvZDIm1DCqIe8mLaheC4AeEv./Kuw5W3Cc332KyPKbJ2bueCG")
 				.roles("USER")
 				.build();
 
 		return new InMemoryUserDetailsManager(userDetails);
 	}
 
+	// @Bean
+	// public RegisteredClientRepository registeredClientRepository() {
+	// 	RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
+	// 			.clientId("oidc-client")
+	// 			.clientSecret("{noop}secret")
+	// 			.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+	// 			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+	// 			.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+	// 			.redirectUri("https://oauth.pstmn.io/v1/callback")
+	// 			.postLogoutRedirectUri("https://oauth.pstmn.io/v1/callback")
+	// 			.scope(OidcScopes.OPENID)
+	// 			.scope(OidcScopes.PROFILE)
+	// 			.scope("ADMIN")
+	// 			.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+	// 			.build();
+
+	// 	return new InMemoryRegisteredClientRepository(oidcClient);
+	// }
+
 	@Bean
-	public RegisteredClientRepository registeredClientRepository() {
-		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-				.clientId("oidc-client")
-				.clientSecret("{noop}secret")
-				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-				.redirectUri("https://oauth.pstmn.io/v1/callback")
-				.postLogoutRedirectUri("https://oauth.pstmn.io/v1/callback")
-				.scope(OidcScopes.OPENID)
-				.scope(OidcScopes.PROFILE)
-				.scope("ADMIN")
-				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-				.build();
-
-		return new InMemoryRegisteredClientRepository(oidcClient);
-	}
-
-	@Bean 
 	public JWKSource<SecurityContext> jwkSource() {
 		KeyPair keyPair = generateRsaKey();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
@@ -130,7 +127,7 @@ public class SecurityConfig {
 		return new ImmutableJWKSet<>(jwkSet);
 	}
 
-	private static KeyPair generateRsaKey() { 
+	private static KeyPair generateRsaKey() {
 		KeyPair keyPair;
 		try {
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -143,12 +140,12 @@ public class SecurityConfig {
 		return keyPair;
 	}
 
-	@Bean 
+	@Bean
 	public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
 		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
 	}
 
-	@Bean 
+	@Bean
 	public AuthorizationServerSettings authorizationServerSettings() {
 		return AuthorizationServerSettings.builder().build();
 	}
