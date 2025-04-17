@@ -38,7 +38,7 @@ public class UserController {
         
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setName(user.getName());
-        userResponseDTO.setMsg(" User has been successfully saved !! 😊 !! ");
+        userResponseDTO.setMsg(" User has been successfully saved !! ");
                                         
         return userResponseDTO;
     }
