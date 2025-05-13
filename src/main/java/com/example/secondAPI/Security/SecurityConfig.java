@@ -8,12 +8,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.example.secondAPI.Security.Model.CustomUserDetail;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,6 +28,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import com.example.secondAPI.Security.Model.CustomUserDetail;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -51,6 +53,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests((authorize) ->
 			authorize
 				.requestMatchers("/user/signUp").permitAll()
+				.requestMatchers("/actuator/health").permitAll()
 				.anyRequest().authenticated()
 				//.anyRequest().permitAll()
 			)
@@ -86,6 +89,7 @@ public class SecurityConfig {
 			 )
 			.authorizeHttpRequests((authorize) -> authorize
 				.requestMatchers("/user/signUp").permitAll()
+				.requestMatchers("/actuator/health").permitAll()
 				.anyRequest().authenticated()
 				//.anyRequest().permitAll()
 			)

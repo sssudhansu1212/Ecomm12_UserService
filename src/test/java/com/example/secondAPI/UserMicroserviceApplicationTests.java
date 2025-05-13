@@ -29,7 +29,7 @@ class UserMicroserviceApplicationTests {
 	public void saveRegisteredClientToDB(){
 		RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
 				.clientId("oidc-client")
-				.clientSecret("$12$CVbOy4WwPMbqBLwZe/0u0ON7ahoPfzVUtoxGzh0Jk3DtKqlKcvnPC")
+				.clientSecret("$2a$12$E97qj9DEVvCPnrSq76Kp7uIv3GvRnQkg5dhDnrxhQUR578/rXeOce")
 				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

@@ -1,4 +1,7 @@
 --
+CREATE DATABASE  IF NOT EXISTS `userservice`;
+USE `userservice`;
+
 -- Host: 127.0.0.1    Database: userservice
 -- ------------------------------------------------------
 -- Server version	8.0.39
@@ -32,6 +35,7 @@ CREATE TABLE `role_seq` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+INSERT INTO role_seq VALUES(1);
 --
 -- Table structure for table `user`
 --
@@ -83,7 +87,7 @@ CREATE TABLE `token_seq` (
   `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
+INSERT INTO token_seq VALUES(1);
 --
 -- Table structure for table `user_roles`
 --
@@ -111,6 +115,6 @@ DROP TABLE IF EXISTS `user_seq`;
 CREATE TABLE `user_seq` (
   `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
+INSERT INTO user_seq VALUES(1);
 -- Dump completed on 2025-03-27 12:43:02
 

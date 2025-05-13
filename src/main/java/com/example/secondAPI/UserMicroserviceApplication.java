@@ -9,6 +9,8 @@ public class UserMicroserviceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UserMicroserviceApplication.class, args);
 		System.out.println(" --User microservice-- ");
+		String username = System.getenv("username_userservice");
+		System.out.println("Username: " + username);
 	}
 
 }
