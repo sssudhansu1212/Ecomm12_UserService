@@ -6,13 +6,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.example.secondAPI.DTO.sendEmailDTO;
 import com.example.secondAPI.Exception.InvalidTokenException;
 import com.example.secondAPI.Exception.UserAlreadyExsistsException;
 import com.example.secondAPI.Exception.UserNameNotFoundException;
@@ -22,6 +22,8 @@ import com.example.secondAPI.Model.User;
 import com.example.secondAPI.Repository.RoleRepository;
 import com.example.secondAPI.Repository.TokenRepository;
 import com.example.secondAPI.Repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Service
@@ -31,17 +33,22 @@ public class SelfUserService implements UserService{
     private BCryptPasswordEncoder bcryptEncoder;
     private RoleRepository roleRepository;
     private TokenRepository tokenRepository;
+    private KafkaTemplate<String,String> kafkaTemplate;
+    private ObjectMapper objectMapper;
 
     @Autowired
     public SelfUserService(UserRepository userRepository,BCryptPasswordEncoder bcryptEncoder,
-                            RoleRepository roleRepository,TokenRepository tokenRepository){
+                            RoleRepository roleRepository,TokenRepository tokenRepository,
+                            KafkaTemplate<String,String> kafkaTemplate,ObjectMapper objectMapper){
         this.userRepository = userRepository;
         this.bcryptEncoder = bcryptEncoder;
         this.roleRepository = roleRepository;
         this.tokenRepository = tokenRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
     }
     
-    public User SignUp(String name,String email,String pwd,List<Role> role)throws UserAlreadyExsistsException{
+    public User SignUp(String name,String email,String pwd,List<Role> role)throws UserAlreadyExsistsException, JsonProcessingException{
 
         List<Role> userRole = new ArrayList<>();
         Role roleSaved;
@@ -62,8 +69,17 @@ public class SelfUserService implements UserService{
         user.setPassword(bcryptEncoder.encode(pwd));
         user.setRoles(userRole);
         user.setEmail(email);
+        User savedUser = userRepository.save(user);
 
-        return userRepository.save(user);
+        //create dto object and send the to : from : and body : inside it
+        sendEmailDTO sendEmaildto = new sendEmailDTO();
+        sendEmaildto.setTo(user.getEmail());
+        sendEmaildto.setFrom("sssudhansu5@gmail.com"); 
+        sendEmaildto.setSubject("Welcome to Gudi in Software Tech!!!");
+        sendEmaildto.setBody(" Welcome to Software tech ..have a nice day to you ...Team Software ");
+        kafkaTemplate.send("sendEmail",objectMapper.writeValueAsString(sendEmaildto));
+
+        return savedUser;
 
     }
 

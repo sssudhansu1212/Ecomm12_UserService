@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -27,7 +26,6 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-
 import com.example.secondAPI.Security.Model.CustomUserDetail;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -47,9 +45,9 @@ public class SecurityConfig {
 				OAuth2AuthorizationServerConfigurer.authorizationServer();
 
 		http
-			// .csrf((csrf) -> csrf
-			// .ignoringRequestMatchers("/user/signUp") // Disable CSRF for /signUp
-			// )
+			.csrf((csrf) -> csrf
+			.ignoringRequestMatchers("/user/signUp") // Disable CSRF for /signUp
+			)
 			.authorizeHttpRequests((authorize) ->
 			authorize
 				.requestMatchers("/user/signUp").permitAll()

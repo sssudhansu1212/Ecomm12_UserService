@@ -18,6 +18,7 @@ import com.example.secondAPI.Exception.UserNameNotFoundException;
 import com.example.secondAPI.Model.Token;
 import com.example.secondAPI.Model.User;
 import com.example.secondAPI.Service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.micrometer.common.lang.NonNull;
 
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public UserResponseDTO signUp(@RequestBody SignUpRequestDTO signUpRequestDTO)throws UserAlreadyExsistsException{
+    public UserResponseDTO signUp(@RequestBody SignUpRequestDTO signUpRequestDTO)throws UserAlreadyExsistsException,JsonProcessingException{
         User user = userService.SignUp(signUpRequestDTO.getName(), signUpRequestDTO.getEmail()
                                         ,signUpRequestDTO.getPassword() , signUpRequestDTO.getRoles());
         
